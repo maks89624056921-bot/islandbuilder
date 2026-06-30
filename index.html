@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Стройка Кликер — Idle-игра для Android</title>
+<meta name="description" content="Стройка Кликер — экономический кликер/idle-игра для Android. Руби дерево, добывай ресурсы, строй здания и становись промышленным магнатом.">
+<link rel="icon" type="image/png" href="https://static.rustore.ru/imgproxy/hAOZWCK1ouzvock7gFEcb1DtEyH9g_P7leC8Z_nk50I/preset:web_app_icon_62/plain/https://static.rustore.ru/2026/6/29/3c/apk/2063727018/content/ICON/d5084d4e-e4fb-4ad7-a85b-9d21438c18dc.png@webp">
+<meta property="og:title" content="Стройка Кликер — Idle-игра для Android">
+<meta property="og:description" content="Экономический кликер/idle-игра. Руби дерево, добывай ресурсы, строй здания и становись промышленным магнатом.">
+<meta property="og:image" content="https://static.rustore.ru/imgproxy/hAOZWCK1ouzvock7gFEcb1DtEyH9g_P7leC8Z_nk50I/preset:web_app_icon_62/plain/https://static.rustore.ru/2026/6/29/3c/apk/2063727018/content/ICON/d5084d4e-e4fb-4ad7-a85b-9d21438c18dc.png@webp">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f172a;
+  --bg2: #1e293b;
+  --accent: #f59e0b;
+  --accent2: #eab308;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --card: #1e293b;
+  --radius: 16px;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  position: relative;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(245,158,11,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-icon {
+  width: 120px; height: 120px;
+  border-radius: 28px;
+  box-shadow: 0 0 60px rgba(245,158,11,0.3);
+  margin-bottom: 24px;
+  transition: transform 0.3s;
+}
+.hero-icon:hover { transform: scale(1.05); }
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+.hero p {
+  font-size: 1.2rem;
+  color: var(--text2);
+  max-width: 520px;
+  margin-bottom: 32px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 36px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0f172a;
+  box-shadow: 0 4px 24px rgba(245,158,11,0.35);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(245,158,11,0.5);
+}
+.btn-secondary {
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-2px);
+}
+.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  width: 28px; height: 44px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+}
+.scroll-indicator::after {
+  content: '';
+  width: 4px; height: 10px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin-top: 8px;
+  animation: scrollAnim 1.8s infinite;
+}
+@keyframes scrollAnim {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(14px); }
+}
+section { padding: 80px 20px; }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 48px;
+}
+.section-title span { color: var(--accent); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.about-text p { color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; }
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.stat-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 0.2s;
+}
+.stat-card:hover { transform: translateY(-4px); }
+.stat-card .num {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.stat-card .label { font-size: 0.85rem; color: var(--text2); margin-top: 4px; }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+.feature-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.25s;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(245,158,11,0.3);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+.feature-card .icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  display: block;
+}
+.feature-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+.feature-card p { font-size: 0.9rem; color: var(--text2); line-height: 1.5; }
+.screenshots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.screenshots-grid img {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+.screenshots-grid img:hover { transform: scale(1.03); }
+.download {
+  text-align: center;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.download h2 { margin-bottom: 12px; }
+.download p { color: var(--text2); margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; }
+.download .btn { font-size: 1.2rem; padding: 18px 44px; }
+.download .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50px;
+  font-size: 0.85rem;
+  color: var(--text2);
+}
+footer {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text2);
+  font-size: 0.9rem;
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2rem; }
+  .hero p { font-size: 1rem; }
+  .hero-icon { width: 90px; height: 90px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .about-stats { grid-template-columns: 1fr 1fr; }
+  .screenshots-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  section { padding: 56px 16px; }
+  .section-title { font-size: 1.6rem; margin-bottom: 32px; }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.6rem; }
+  .about-stats { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .screenshots-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .hero-btns { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <img class="hero-icon" src="https://static.rustore.ru/imgproxy/hAOZWCK1ouzvock7gFEcb1DtEyH9g_P7leC8Z_nk50I/preset:web_app_icon_62/plain/https://static.rustore.ru/2026/6/29/3c/apk/2063727018/content/ICON/d5084d4e-e4fb-4ad7-a85b-9d21438c18dc.png@webp" alt="Стройка Кликер" loading="lazy">
+  <h1>Стройка Кликер</h1>
+  <p>Начни с одного топора и построй промышленную империю. Экономический кликер/idle-игра для Android.</p>
+  <div class="hero-btns">
+    <a class="btn btn-primary" href="https://www.rustore.ru/catalog/app/com.wscod.islandbuilder" target="_blank" rel="noopener">Скачать в RuStore</a>
+    <a class="btn btn-secondary" href="#about">О игре</a>
+  </div>
+  <div class="scroll-indicator"></div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <h2 class="section-title">О <span>игре</span></h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>«Стройка Кликер» — это экономический кликер/idle-игра, где ты начинаешь с одного топора и превращаешься в промышленного магната.</p>
+        <p>Руби дерево, добывай камень и золото, строй здания — от лесорубки до лаборатории. Каждое здание приносит ресурсы автоматически, даже когда ты не в игре.</p>
+        <p>Покупай улучшения, открывай достижения, прокачивай уровень и становись настоящим олигархом!</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="num">6</div>
+          <div class="label">видов ресурсов</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">11</div>
+          <div class="label">зданий</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">28</div>
+          <div class="label">достижений</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">61 KB</div>
+          <div class="label">размер игры</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--bg2);" id="features">
+  <div class="container">
+    <h2 class="section-title">Возможности <span>игры</span></h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="icon">🪓</span>
+        <h3>6 видов ресурсов</h3>
+        <p>Дерево, камень, золото, еда, энергия и кристаллы — добывай и управляй экономикой.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🏗️</span>
+        <h3>11 уникальных зданий</h3>
+        <p>От лесорубки до лаборатории — каждое здание даёт новый эффект и автоматическую добычу.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">⚡</span>
+        <h3>Улучшения и бусты</h3>
+        <p>8 улучшений и временные бусты за рекламу — ускоряй прогресс и открывай новые возможности.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🏆</span>
+        <h3>28 достижений</h3>
+        <p>Выполняй задания, получай XP и прокачивай свой уровень.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">📱</span>
+        <h3>Оффлайн-заработок</h3>
+        <p>Здания приносят ресурсы даже когда ты не в игре — возвращайся и становись богаче.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">💾</span>
+        <h3>Автосохранение</h3>
+        <p>Прогресс сохраняется автоматически — продолжай с того места, где остановился.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="screenshots">
+  <div class="container">
+    <h2 class="section-title">Скриншоты</h2>
+    <div class="screenshots-grid">
+      <img src="https://static.rustore.ru/imgproxy/fss4SjS4R70LG2mIqiCZIjD8PaPjNU2mRABr2G1lPt4/preset:web_scr_prt_162/plain/https://static.rustore.ru/2026/6/29/57/apk/2063727018/content/SCREENSHOT/a3e05372-8e22-4ab4-93e0-c51c0548f241.jpg@webp" alt="Скриншот 1" loading="lazy">
+      <img src="https://static.rustore.ru/imgproxy/vGTHW8h_MQN4h0XMEs08sxzYJhagKOrkaOpOGolTCXw/preset:web_scr_prt_162/plain/https://static.rustore.ru/2026/6/29/42/apk/2063727018/content/SCREENSHOT/8aedd277-a8f0-4cdd-9727-27aedd9a5d0e.jpg@webp" alt="Скриншот 2" loading="lazy">
+      <img src="https://static.rustore.ru/imgproxy/FGqIEQY5cITk4KlQxWpkT-tLd8xkkABrTUiov30CAhI/preset:web_scr_prt_162/plain/https://static.rustore.ru/2026/6/29/16/apk/2063727018/content/SCREENSHOT/25cc709e-5d86-446a-a03d-ebacb6dc4b48.jpg@webp" alt="Скриншот 3" loading="lazy">
+      <img src="https://static.rustore.ru/imgproxy/zKJOR_2nASWt7wEklItyBeTLyi-2Xd5jnPTYye5iWis/preset:web_scr_prt_162/plain/https://static.rustore.ru/2026/6/29/87/apk/2063727018/content/SCREENSHOT/5bcac26e-08b4-409b-9578-09f58766155a.jpg@webp" alt="Скриншот 4" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section class="download" id="download">
+  <div class="container">
+    <h2 class="section-title">Скачать <span>игру</span></h2>
+    <p>Доступно в RuStore для Android. Версия 1.0, всего 61 KB. Минимальная версия Android — 7.</p>
+    <a class="btn btn-primary" href="https://www.rustore.ru/catalog/app/com.wscod.islandbuilder" target="_blank" rel="noopener">
+      Скачать в RuStore
+    </a>
+    <div class="badge">Скачиваний: до 1 тыс</div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Разработчик: <a href="https://www.rustore.ru/catalog/developer/4c1knj" target="_blank" rel="noopener">Попков Максим</a></p>
+    <p>Поддержка: <a href="mailto:maks89524056921@mail.ru">maks89524056921@mail.ru</a></p>
+    <p style="margin-top: 12px; font-size: 0.8rem;">&copy; 2026 Стройка Кликер</p>
+  </div>
+</footer>
+
+</body>
+</html>
